@@ -428,15 +428,15 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                             }
 
                             return (
-                                <div key={idx} className="bg-zinc-900/40 border border-white/5 rounded-2xl p-4 animate-in slide-in-from-bottom-2 duration-300">
-                                    <div className="flex items-start gap-4">
-                                        <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center shrink-0 text-xs font-bold text-zinc-500 mt-2">
+                                <div key={idx} className="bg-zinc-900/40 border border-white/5 rounded-2xl p-3 md:p-4 animate-in slide-in-from-bottom-2 duration-300">
+                                    <div className="flex items-start gap-0 md:gap-4">
+                                        <div className="hidden md:flex w-8 h-8 rounded-full bg-zinc-800 items-center justify-center shrink-0 text-xs font-bold text-zinc-500 mt-2">
                                             {idx + 1}
                                         </div>
 
-                                        <div className="flex-1 space-y-3">
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{file.name}</span>
+                                        <div className="flex-1 space-y-2 md:space-y-3">
+                                            <div className="flex justify-between items-center pl-1 md:pl-0">
+                                                <span className="text-[10px] md:text-xs font-bold text-zinc-500 uppercase tracking-widest truncate max-w-[200px]">{file.name}</span>
                                                 <button onClick={() => removeFile(file.name)} className="text-zinc-600 hover:text-red-500"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" strokeWidth={2} /></svg></button>
                                             </div>
 
@@ -494,14 +494,14 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                                         placeholder="BPM"
                                                         value={meta.bpm}
                                                         onChange={e => updateFileMeta(file.name, 'bpm', e.target.value)}
-                                                        className="w-1/2 bg-zinc-950 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-[#ff5500] outline-none"
+                                                        className="w-1/2 bg-zinc-950 border border-white/10 rounded-lg px-3 py-2 text-white text-xs md:text-sm focus:border-[#ff5500] outline-none"
                                                     />
                                                     <input
                                                         type="text"
                                                         placeholder="Key"
                                                         value={meta.key}
                                                         onChange={e => updateFileMeta(file.name, 'key', e.target.value)}
-                                                        className="w-1/2 bg-zinc-950 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-[#ff5500] outline-none"
+                                                        className="w-1/2 bg-zinc-950 border border-white/10 rounded-lg px-3 py-2 text-white text-xs md:text-sm focus:border-[#ff5500] outline-none"
                                                     />
                                                 </div>
                                             </div>
