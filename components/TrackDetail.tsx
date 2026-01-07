@@ -80,7 +80,9 @@ const TrackDetail: React.FC<TrackDetailProps> = ({
 
   const activeVersion = currentPlayingVersionId
     ? track.versions?.find(v => v.id === currentPlayingVersionId)
-    : (currentAudioUrl ? track.versions?.find(v => v.audioUrl === currentAudioUrl) : null);
+    : (currentAudioUrl
+      ? track.versions?.find(v => v.audioUrl === currentAudioUrl)
+      : track.versions?.[0]);
   const isOriginalActive = isPlaying && (!currentAudioUrl || currentAudioUrl === track.audioUrl) && !currentPlayingVersionId;
 
   return (
