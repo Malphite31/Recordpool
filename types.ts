@@ -12,6 +12,7 @@ export interface Track {
   title: string;
   artistId: string;
   artist: string;
+  album?: string;
   artistBio?: string;
   artistAvatarUrl?: string;
   artistHeaderUrl?: string;

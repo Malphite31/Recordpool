@@ -30,9 +30,10 @@ interface UploadModalProps {
     onClose: () => void;
     onUpload: (result: UploadBatchResult) => void;
     defaultArtist?: string;
+    existingAlbums?: string[];
 }
 
-const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArtist = '' }) => {
+const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArtist = '', existingAlbums = [] }) => {
     // Stages: 'drop' -> 'organize' -> 'uploading' -> 'done'
     const [stage, setStage] = useState<'drop' | 'organize' | 'uploading' | 'done'>('drop');
     const [isDragOver, setIsDragOver] = useState(false);
@@ -351,13 +352,21 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     {uploadMode === 'versions' && (
-                                        <input
-                                            type="text"
-                                            placeholder="Album (Optional)"
-                                            value={mainMeta.album}
-                                            onChange={e => setMainMeta(p => ({ ...p, album: e.target.value }))}
-                                            className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
-                                        />
+                                        <>
+                                            <input
+                                                type="text"
+                                                list="existing-albums-list"
+                                                placeholder="Album (Optional)"
+                                                value={mainMeta.album}
+                                                onChange={e => setMainMeta(p => ({ ...p, album: e.target.value }))}
+                                                className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
+                                            />
+                                            <datalist id="existing-albums-list">
+                                                {existingAlbums.map((alb, i) => (
+                                                    <option key={i} value={alb} />
+                                                ))}
+                                            </datalist>
+                                        </>
                                     )}
                                     <input
                                         type="text"

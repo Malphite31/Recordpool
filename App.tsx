@@ -469,6 +469,7 @@ const App: React.FC = () => {
       {isUploading && (
         <UploadModal
           defaultArtist={userProfile.name}
+          existingAlbums={Array.from(new Set(tracks.map(t => t.album).filter(Boolean))) as string[]}
           onClose={() => setIsUploading(false)}
           onUpload={async (result) => {
             const { mode, items, mainMetadata } = result;
@@ -489,6 +490,16 @@ const App: React.FC = () => {
                   bpm: parseInt(item.customMeta.bpm) || 124,
                   key: item.customMeta.key || '1A',
                   genre: mainMetadata?.genre || item.customMeta.genre || 'Tech House',
+                  album: mainMetadata?.album, // Persist Album for Individual Items too if set? Actually mainMeta.album is optional text.
+                  // Wait, earlier I hid Album input for individual mode. 
+                  // But mainMetadata.title IS Album Title for individual mode.
+                  // So album = mainMetadata.title?
+                  // If mode === 'individual' (Album), the "Album Name" is the grouping.
+                  // But each file is a track.
+                  // So track.album = mainMetadata.title.
+                  // Correct logic:
+                  // If Album Mode: album = mainMetadata.title
+                  // If Song Mode: album = mainMetadata.album
                   duration: '4:00',
                   coverUrl: sharedCoverUrl || `https://picsum.photos/seed/${item.file.name}/400/400`,
                   audioUrl: url,
@@ -499,7 +510,14 @@ const App: React.FC = () => {
                   versions: []
                 } as Track;
               }));
-              setTracks(prev => [...newTracks, ...prev]);
+
+              // Correct logic application:
+              const finalTracks = newTracks.map(t => ({
+                ...t,
+                album: mainMetadata?.title || t.album
+              }));
+
+              setTracks(prev => [...finalTracks, ...prev]);
             } else {
               const coverUrl = mainMetadata?.coverFile ? URL.createObjectURL(mainMetadata.coverFile) : `https://picsum.photos/seed/${mainMetadata?.title || 'cover'}/400/400`;
 
@@ -525,6 +543,7 @@ const App: React.FC = () => {
                 bpm: parseInt(items[0].customMeta.bpm) || 124,
                 key: items[0].customMeta.key || '1A',
                 genre: mainMetadata?.genre || 'Tech House',
+                album: mainMetadata?.album, // Added
                 duration: versions[0].duration,
                 coverUrl: coverUrl,
                 audioUrl: versions[0].audioUrl,
