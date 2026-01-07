@@ -18,6 +18,7 @@ interface ArtistProfileProps {
   userProfile?: { name: string; bio: string; avatarUrl: string; headerUrl: string };
   onEditProfile?: () => void;
   onUploadClick?: () => void;
+  onAdminClick?: () => void;
 }
 
 const ArtistProfile: React.FC<ArtistProfileProps> = ({
@@ -34,7 +35,8 @@ const ArtistProfile: React.FC<ArtistProfileProps> = ({
   onAddToPlaylist,
   userProfile,
   onEditProfile,
-  onUploadClick
+  onUploadClick,
+  onAdminClick
 }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const isCurrentUser = artistId === 'art-user';
@@ -122,6 +124,15 @@ const ArtistProfile: React.FC<ArtistProfileProps> = ({
               <button className="bg-white/5 text-white text-[9px] md:text-[12px] font-black uppercase tracking-[0.15em] py-3 md:py-5 rounded-xl md:rounded-2xl hover:bg-white/10 transition-all active:scale-95 border border-white/5">
                 Share Link
               </button>
+              {isCurrentUser && (
+                <button
+                  onClick={onAdminClick}
+                  className="col-span-2 md:col-span-1 bg-zinc-800 text-zinc-400 hover:text-white text-[9px] md:text-[12px] font-black uppercase tracking-[0.15em] py-3 md:py-5 rounded-xl md:rounded-2xl hover:bg-zinc-700 transition-all active:scale-95 border border-white/5 flex items-center justify-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4 2 2 0 000-4zm0 14v-2m0 0a2 2 0 100-4 2 2 0 000 4zm-8.146-7.854l-1.414-1.414m1.414 1.414a2 2 0 102.828-2.828 2 2 0 00-2.828 2.828zm14.292 2.828l1.414 1.414m-1.414-1.414a2 2 0 102.828 2.828 2 2 0 00-2.828-2.828z" /></svg>
+                  Admin Panel
+                </button>
+              )}
             </div>
           </div>
         </div>
