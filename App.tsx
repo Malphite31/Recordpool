@@ -365,6 +365,7 @@ const App: React.FC = () => {
                 isPlaying={isPlaying}
                 onEdit={setEditingTrack}
                 onNavigateToTrack={navigateToTrack}
+                onNavigateToAlbum={setViewedAlbum}
                 onLike={handleLike}
                 onAddToPlaylist={setTrackToPlaylist}
                 userProfile={viewedArtistId === 'art-user' ? userProfile : undefined}

@@ -12,6 +12,7 @@ interface ArtistProfileProps {
   isPlaying: boolean;
   onEdit: (track: Track) => void;
   onNavigateToTrack: (track: Track) => void;
+  onNavigateToAlbum?: (albumName: string) => void;
   onLike?: (id: string) => void;
   onAddToPlaylist?: (track: Track) => void;
   userProfile?: { name: string; bio: string; avatarUrl: string; headerUrl: string };
@@ -28,6 +29,7 @@ const ArtistProfile: React.FC<ArtistProfileProps> = ({
   isPlaying,
   onEdit,
   onNavigateToTrack,
+  onNavigateToAlbum,
   onLike,
   onAddToPlaylist,
   userProfile,
@@ -36,6 +38,23 @@ const ArtistProfile: React.FC<ArtistProfileProps> = ({
 }) => {
   const isCurrentUser = artistId === 'art-user';
   const artistTracks = tracks.filter(t => t.artistId === artistId);
+
+  const displayTracks = artistTracks.reduce((acc: Track[], track) => {
+    if (track.album) {
+      const existingGroup = acc.find(t => t.isAlbum && t.title === track.album);
+      if (existingGroup) return acc;
+
+      const albumTracks = artistTracks.filter(t => t.album === track.album);
+      if (albumTracks.length > 1) {
+        acc.push({ ...track, title: track.album, isAlbum: true });
+      } else {
+        acc.push(track);
+      }
+    } else {
+      acc.push(track);
+    }
+    return acc;
+  }, []);
 
   const profileName = isCurrentUser && userProfile ? userProfile.name : (artistTracks[0]?.artist || 'Unknown Artist');
   const profileBio = isCurrentUser && userProfile ? userProfile.bio : (artistTracks[0]?.artistBio || 'This elite producer has chosen to let their music speak for itself.');
@@ -126,19 +145,19 @@ const ArtistProfile: React.FC<ArtistProfileProps> = ({
             )}
           </div>
 
-          {artistTracks.length > 0 ? (
+          {displayTracks.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-x-6 md:gap-x-10 gap-y-10 md:gap-y-16">
-              {artistTracks.map(track => (
+              {displayTracks.map(track => (
                 <div key={track.id}>
                   <TrackCard
                     track={track}
                     isCurrent={currentTrackId === track.id}
                     isPlaying={isPlaying}
-                    onSelect={() => onSelectTrack(track)}
+                    onSelect={() => track.isAlbum ? onNavigateToAlbum?.(track.album!) : onSelectTrack(track)}
                     onEdit={onEdit}
                     onLike={() => onLike?.(track.id)}
                     onAddToPlaylist={() => onAddToPlaylist?.(track)}
-                    onNavigate={() => onNavigateToTrack(track)}
+                    onNavigate={() => track.isAlbum ? onNavigateToAlbum?.(track.album!) : onNavigateToTrack(track)}
                   />
                 </div>
               ))}
