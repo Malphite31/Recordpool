@@ -152,6 +152,7 @@ const TrackDetail: React.FC<TrackDetailProps> = ({
             <div className="w-full h-24 md:h-36 mb-8 md:mb-10 relative">
               <WaveformVisualizer
                 key={currentAudioUrl || track.audioUrl}
+                audioUrl={currentAudioUrl || track.audioUrl}
                 peaks={track.peaks || []}
                 progress={progress}
                 onSeek={handleSeek}

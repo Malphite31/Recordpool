@@ -8,9 +8,10 @@ interface WaveformVisualizerProps {
   isPlaying: boolean;
   analyser: AnalyserNode | null;
   duration?: string;
+  audioUrl?: string; // Added to seed random variations for shared peaks
 }
 
-const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({ peaks, progress, onSeek, isPlaying, analyser, duration }) => {
+const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({ peaks, progress, onSeek, isPlaying, analyser, duration, audioUrl }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hoverProgress, setHoverProgress] = useState<number | null>(null);
   const [currentTime, setCurrentTime] = useState('0:00');
@@ -39,42 +40,64 @@ const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({ peaks, progress
     canvas.height = rect.height * dpr;
     ctx.scale(dpr, dpr);
 
+    // Create a simple seed from audioUrl to distinctify versions sharing peaks
+    let seed = 0;
+    if (audioUrl) {
+      for (let i = 0; i < audioUrl.length; i++) {
+        seed = (seed << 5) - seed + audioUrl.charCodeAt(i);
+        seed |= 0;
+      }
+    }
+
+    const pseudoRandom = (idx: number) => {
+      const x = Math.sin(idx + seed) * 10000;
+      return x - Math.floor(x);
+    };
+
     const draw = () => {
       ctx.clearRect(0, 0, rect.width, rect.height);
-      
-      const barWidth = 2; 
+
+      const barWidth = 2;
       const barSpacing = 1;
       const totalBarWidth = barWidth + barSpacing;
-      
-      // We want to use as many peaks as we have or as many as fit
+
       const displayPeaks = peaks.length > 0 ? peaks : Array(100).fill(0.2);
       const step = displayPeaks.length / (rect.width / totalBarWidth);
-      
-      const centerY = rect.height * 0.65; 
-      const gap = 2; 
+
+      const centerY = rect.height * 0.65;
+      const gap = 2;
 
       for (let i = 0; i < rect.width / totalBarWidth; i++) {
         const x = i * totalBarWidth;
         const peakIndex = Math.floor(i * step);
-        const peak = displayPeaks[peakIndex] || 0.1;
+        let peak = displayPeaks[peakIndex] || 0.1;
+
+        // Visual variation for versions (only if seed exists and not 0)
+        // We only vary if it is likely a shared peak array (i.e. we want visual distinction)
+        if (seed !== 0) {
+          const variance = pseudoRandom(peakIndex) * 0.4 - 0.2; // +/- 0.2
+          peak = Math.max(0.1, Math.min(1.0, peak + variance));
+        }
+
         const barProgress = i / (rect.width / totalBarWidth);
-        
+        // ... rest of draw ...
+
         const h = peak * (rect.height * 0.8);
         const isPlayed = barProgress <= progress;
         const isHovered = hoverProgress !== null && barProgress <= hoverProgress;
 
         if (isHovered && !isPlayed) {
-          ctx.fillStyle = '#ff9966'; 
+          ctx.fillStyle = '#ff9966';
         } else if (isPlayed) {
-          ctx.fillStyle = '#ff5500'; 
+          ctx.fillStyle = '#ff5500';
         } else {
-          ctx.fillStyle = '#ffffff'; 
+          ctx.fillStyle = '#ffffff';
         }
 
         // Top main bars
         const topH = h * 0.75;
         ctx.fillRect(x, centerY - topH, barWidth, topH);
-        
+
         // Reflection
         const bottomH = h * 0.25;
         ctx.globalAlpha = isPlayed ? 0.5 : 0.2;
@@ -95,7 +118,7 @@ const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({ peaks, progress
   };
 
   return (
-    <div 
+    <div
       className="relative w-full h-full cursor-pointer group select-none"
       onMouseMove={(e) => {
         const rect = canvasRef.current?.getBoundingClientRect();
@@ -105,9 +128,9 @@ const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({ peaks, progress
       onClick={handleInteraction}
     >
       <canvas ref={canvasRef} className="w-full h-full" />
-      
+
       {/* Current Time Badge */}
-      <div 
+      <div
         className="absolute bottom-2 z-10 px-1 bg-black text-[10px] font-bold text-[#ff5500] pointer-events-none"
         style={{ left: `${progress * 100}%`, transform: 'translateX(-50%)' }}
       >
@@ -122,7 +145,7 @@ const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({ peaks, progress
       )}
 
       {/* Playhead Marker */}
-      <div 
+      <div
         className="absolute top-0 bottom-0 w-[1px] bg-[#ff5500] pointer-events-none"
         style={{ left: `${progress * 100}%` }}
       />
