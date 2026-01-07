@@ -83,12 +83,16 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
 
     const processFiles = (newFiles: File[]) => {
         const validFiles = newFiles.filter(f => f.type.startsWith('audio/'));
-        if (validFiles.length === 0) return;
+
+        // Filter out duplicates based on name and size
+        const uniqueFiles = validFiles.filter(newF => !files.some(existingF => existingF.name === newF.name && existingF.size === newF.size));
+
+        if (uniqueFiles.length === 0) return;
 
         const newMeta = { ...fileMeta };
         let candidateMainTitle = '';
 
-        validFiles.forEach((f, idx) => {
+        uniqueFiles.forEach((f, idx) => {
             const nameWithoutExt = f.name.replace(/\.[^/.]+$/, ""); // Strip extension
 
             // Parse "Artist - Title (Version)"
@@ -122,7 +126,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
             };
         });
 
-        setFiles(prev => [...prev, ...validFiles]);
+        setFiles(prev => [...prev, ...uniqueFiles]);
         setFileMeta(prev => ({ ...prev, ...newMeta }));
 
         if (!mainMeta.title && candidateMainTitle) {
@@ -170,6 +174,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
 
     // --- Uploading Logic ---
     const startUpload = () => {
+        if (stage === 'uploading') return;
         setStage('uploading');
 
         // Initialize progress
