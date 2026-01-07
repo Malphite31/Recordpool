@@ -18,6 +18,7 @@ export interface UploadBatchResult {
     mainMetadata?: {
         title: string;
         artist: string;
+        album: string;
         genre: string;
         description: string;
         coverFile: File | null;
@@ -44,6 +45,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
     const [mainMeta, setMainMeta] = useState({
         title: '',
         artist: defaultArtist,
+        album: '',
         genre: 'Tech House',
         description: '',
         coverFile: null as File | null
@@ -324,17 +326,26 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                 <div className="grid grid-cols-2 gap-4">
                                     <input
                                         type="text"
+                                        placeholder="Album"
+                                        value={mainMeta.album}
+                                        onChange={e => setMainMeta(p => ({ ...p, album: e.target.value }))}
+                                        className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
+                                    />
+                                    <input
+                                        type="text"
                                         placeholder="Genre"
                                         value={mainMeta.genre}
                                         onChange={e => setMainMeta(p => ({ ...p, genre: e.target.value }))}
                                         className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
                                     />
+                                </div>
+                                <div>
                                     <input
                                         type="text"
                                         placeholder="Description (Optional)"
                                         value={mainMeta.description}
                                         onChange={e => setMainMeta(p => ({ ...p, description: e.target.value }))}
-                                        className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
+                                        className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
                                     />
                                 </div>
                             </div>
