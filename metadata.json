@@ -1,0 +1,7 @@
+{
+  "name": "VibePool DJ Record Pool",
+  "description": "A high-performance DJ record pool for discovering, uploading, and analyzing tracks with an integrated AI assistant and real-time audio visualizers.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
