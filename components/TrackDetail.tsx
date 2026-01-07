@@ -173,21 +173,21 @@ const TrackDetail: React.FC<TrackDetailProps> = ({
               />
             </div>
 
-            <div className="flex items-center gap-3 md:gap-5">
+            <div className="flex items-center gap-2 md:gap-5">
               <button
                 onClick={onPlayToggle}
-                className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center transition-all shadow-xl shrink-0 ${isPlaying ? 'bg-[#ff5500] text-white' : 'bg-white text-black hover:bg-zinc-200'}`}
+                className={`w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-3xl flex items-center justify-center transition-all shadow-xl shrink-0 ${isPlaying ? 'bg-[#ff5500] text-white' : 'bg-white text-black hover:bg-zinc-200'}`}
               >
                 {isPlaying ? (
-                  <svg className="w-6 h-6 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>
+                  <svg className="w-5 h-5 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>
                 ) : (
-                  <svg className="w-6 h-6 md:w-7 md:h-7 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                  <svg className="w-5 h-5 md:w-7 md:h-7 ml-0.5 md:ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                 )}
               </button>
 
               <button
                 onClick={onLike}
-                className={`flex flex-col items-center justify-center gap-1 bg-zinc-800/80 border border-white/5 w-20 md:w-24 h-14 md:h-16 rounded-2xl md:rounded-3xl transition-all shrink-0 ${track.isLiked ? 'text-[#ff5500] border-[#ff5500]/30' : 'text-zinc-500 hover:text-white'}`}
+                className={`flex flex-col items-center justify-center gap-0.5 md:gap-1 bg-zinc-800/80 border border-white/5 w-14 md:w-24 h-12 md:h-16 rounded-xl md:rounded-3xl transition-all shrink-0 ${track.isLiked ? 'text-[#ff5500] border-[#ff5500]/30' : 'text-zinc-500 hover:text-white'}`}
               >
                 <svg className={`w-4 h-4 md:w-5 md:h-5 ${track.isLiked ? 'fill-current' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -198,7 +198,7 @@ const TrackDetail: React.FC<TrackDetailProps> = ({
               {onEdit && (
                 <button
                   onClick={() => onEdit(track)}
-                  className="flex flex-col items-center justify-center gap-1 bg-zinc-800/80 border border-white/5 w-20 md:w-24 h-14 md:h-16 rounded-2xl md:rounded-3xl transition-all shrink-0 text-zinc-500 hover:text-white hover:bg-zinc-700/50"
+                  className="flex flex-col items-center justify-center gap-0.5 md:gap-1 bg-zinc-800/80 border border-white/5 w-14 md:w-24 h-12 md:h-16 rounded-xl md:rounded-3xl transition-all shrink-0 text-zinc-500 hover:text-white hover:bg-zinc-700/50"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                   <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">Edit</span>
@@ -207,7 +207,7 @@ const TrackDetail: React.FC<TrackDetailProps> = ({
 
               <button
                 onClick={() => handleDownload(track)}
-                className="flex-1 bg-[#ff5500] text-white h-14 md:h-16 rounded-2xl md:rounded-3xl font-black uppercase text-xs md:text-sm tracking-[0.2em] hover:brightness-110 active:scale-[0.98] transition-all shadow-2xl shadow-[#ff5500]/20 flex items-center justify-center gap-2 md:gap-3 px-4"
+                className="flex-1 bg-[#ff5500] text-white h-12 md:h-16 rounded-xl md:rounded-3xl font-black uppercase text-[10px] md:text-sm tracking-[0.2em] hover:brightness-110 active:scale-[0.98] transition-all shadow-2xl shadow-[#ff5500]/20 flex items-center justify-center gap-1.5 md:gap-3 px-3 md:px-4"
               >
                 <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" strokeWidth={2.5} /></svg>
                 <span className="truncate">Download</span>
