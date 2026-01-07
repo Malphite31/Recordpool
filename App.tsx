@@ -346,7 +346,14 @@ const App: React.FC = () => {
                 isPlaying={isPlaying && currentTrack?.id === viewedTrack.id}
                 currentAudioUrl={currentTrack?.audioUrl}
                 currentPlayingVersionId={currentTrack?.versionId}
-                onPlayToggle={() => selectTrack(viewedTrack)}
+                onPlayToggle={() => {
+                  if (currentTrack?.id === viewedTrack.id) {
+                    togglePlay();
+                  } else {
+                    selectTrack(viewedTrack);
+                  }
+                }}
+                onEdit={viewedTrack.artistId === 'art-user' ? setEditingTrack : undefined}
                 onPlayVersion={selectTrackVersion}
                 onBack={navigateToHome}
                 onArtistClick={navigateToArtist}

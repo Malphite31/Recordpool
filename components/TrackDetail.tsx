@@ -13,6 +13,7 @@ interface TrackDetailProps {
   onBack: () => void;
   onArtistClick: (artistId: string) => void;
   onLike: () => void;
+  onEdit?: (track: Track) => void; // Added
 }
 
 const TrackDetail: React.FC<TrackDetailProps> = ({
@@ -24,7 +25,8 @@ const TrackDetail: React.FC<TrackDetailProps> = ({
   onPlayVersion,
   onBack,
   onArtistClick,
-  onLike
+  onLike,
+  onEdit
 }) => {
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const [progress, setProgress] = useState(0);
@@ -183,6 +185,16 @@ const TrackDetail: React.FC<TrackDetailProps> = ({
                 </svg>
                 <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">{track.likeCount || 0}</span>
               </button>
+
+              {onEdit && (
+                <button
+                  onClick={() => onEdit(track)}
+                  className="flex flex-col items-center justify-center gap-1 bg-zinc-800/80 border border-white/5 w-20 md:w-24 h-14 md:h-16 rounded-2xl md:rounded-3xl transition-all shrink-0 text-zinc-500 hover:text-white hover:bg-zinc-700/50"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                  <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">Edit</span>
+                </button>
+              )}
 
               <button
                 onClick={() => handleDownload(track)}
