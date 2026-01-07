@@ -620,7 +620,18 @@ const App: React.FC = () => {
         />
       )}
 
-      {editingTrack && <EditTrackModal track={editingTrack} onSave={(ut) => { setTracks(ts => ts.map(t => t.id === ut.id ? ut : t)); setEditingTrack(null); }} onClose={() => setEditingTrack(null)} />}
+      {editingTrack && (
+        <EditTrackModal
+          track={editingTrack}
+          onSave={(ut) => { setTracks(ts => ts.map(t => t.id === ut.id ? ut : t)); setEditingTrack(null); }}
+          onDelete={(id) => {
+            setTracks(ts => ts.filter(t => t.id !== id));
+            setEditingTrack(null);
+            if (currentTrack?.id === id) { setIsPlaying(false); setCurrentTrack(null); }
+          }}
+          onClose={() => setEditingTrack(null)}
+        />
+      )}
 
       {isEditingProfile && (
         <EditProfileModal

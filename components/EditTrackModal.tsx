@@ -5,16 +5,18 @@ import { Track, Genre } from '../types';
 interface EditTrackModalProps {
   track: Track;
   onSave: (updatedTrack: Track) => void;
+  onDelete?: (trackId: string) => void;
   onClose: () => void;
 }
 
-const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onClose }) => {
+const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onDelete, onClose }) => {
   const [formData, setFormData] = useState<Partial<Track>>({
     title: track.title,
     artist: track.artist,
     bpm: track.bpm,
     key: track.key,
     genre: track.genre,
+    album: track.album || '', // Add Album support
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -33,13 +35,13 @@ const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onClose 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="glass w-full max-w-lg p-8 rounded-3xl border border-white/10 relative shadow-2xl">
-        <button 
-          onClick={onClose} 
+        <button
+          onClick={onClose}
           className="absolute top-6 right-6 text-zinc-500 hover:text-white transition-colors"
           aria-label="Close modal"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
@@ -50,7 +52,7 @@ const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onClose 
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
+            <div className="space-y-2 col-span-2">
               <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">Track Title</label>
               <input
                 type="text"
@@ -58,10 +60,11 @@ const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onClose 
                 value={formData.title}
                 onChange={handleChange}
                 required
-                className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#ff5500]/50 transition-all"
                 placeholder="e.g. Neon Nights"
               />
             </div>
+
             <div className="space-y-2">
               <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">Artist</label>
               <input
@@ -70,10 +73,23 @@ const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onClose 
                 value={formData.artist}
                 onChange={handleChange}
                 required
-                className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#ff5500]/50 transition-all"
                 placeholder="e.g. Cyber Pulse"
               />
             </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">Album</label>
+              <input
+                type="text"
+                name="album"
+                value={formData.album}
+                onChange={handleChange}
+                className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#ff5500]/50 transition-all"
+                placeholder="e.g. Summer Hits"
+              />
+            </div>
+
             <div className="space-y-2">
               <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">BPM</label>
               <input
@@ -81,7 +97,7 @@ const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onClose 
                 name="bpm"
                 value={formData.bpm}
                 onChange={handleChange}
-                className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#ff5500]/50 transition-all"
                 placeholder="124"
               />
             </div>
@@ -92,7 +108,7 @@ const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onClose 
                 name="key"
                 value={formData.key}
                 onChange={handleChange}
-                className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#ff5500]/50 transition-all"
                 placeholder="e.g. 4A"
               />
             </div>
@@ -102,7 +118,7 @@ const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onClose 
                 name="genre"
                 value={formData.genre}
                 onChange={handleChange}
-                className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all appearance-none"
+                className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-[#ff5500]/50 transition-all appearance-none"
               >
                 {Object.values(Genre).map(g => (
                   <option key={g} value={g} className="bg-zinc-900">{g}</option>
@@ -111,17 +127,31 @@ const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onClose 
             </div>
           </div>
 
-          <div className="flex space-x-4 pt-4">
+          <div className="flex gap-3 pt-4 border-t border-white/5">
+            {onDelete && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (confirm('Are you sure you want to delete this track? This cannot be undone.')) {
+                    onDelete(track.id);
+                  }
+                }}
+                className="px-5 py-3 rounded-xl border border-red-500/30 text-red-500 font-bold hover:bg-red-500/10 transition-all mr-auto"
+              >
+                Delete
+              </button>
+            )}
+
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-3 rounded-xl border border-white/10 text-white font-semibold hover:bg-white/5 transition-all"
+              className="px-6 py-3 rounded-xl border border-white/10 text-white font-semibold hover:bg-white/5 transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-6 py-3 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-500/20"
+              className="px-6 py-3 rounded-xl bg-[#ff5500] text-white font-bold hover:brightness-110 transition-all shadow-lg shadow-[#ff5500]/20"
             >
               Save Changes
             </button>
