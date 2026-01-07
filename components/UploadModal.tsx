@@ -352,21 +352,24 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     {uploadMode === 'versions' && (
-                                        <>
+                                        <div className="relative group">
                                             <input
                                                 type="text"
                                                 list="existing-albums-list"
                                                 placeholder="Album (Optional)"
                                                 value={mainMeta.album}
                                                 onChange={e => setMainMeta(p => ({ ...p, album: e.target.value }))}
-                                                className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
+                                                className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none [&::-webkit-calendar-picker-indicator]:opacity-0"
                                             />
                                             <datalist id="existing-albums-list">
                                                 {existingAlbums.map((alb, i) => (
                                                     <option key={i} value={alb} />
                                                 ))}
                                             </datalist>
-                                        </>
+                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500 group-hover:text-white transition-colors">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                            </div>
+                                        </div>
                                     )}
                                     <input
                                         type="text"
