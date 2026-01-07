@@ -354,41 +354,6 @@ const App: React.FC = () => {
               />
             );
           }
-          if (viewedArtistId) {
-            return (
-              <ArtistProfile
-                artistId={viewedArtistId}
-                tracks={tracks}
-                onBack={navigateToHome}
-                onSelectTrack={selectTrack}
-                currentTrackId={currentTrack?.id}
-                isPlaying={isPlaying}
-                onEdit={setEditingTrack}
-                onNavigateToTrack={navigateToTrack}
-                onNavigateToAlbum={setViewedAlbum}
-                onLike={handleLike}
-                onAddToPlaylist={setTrackToPlaylist}
-                userProfile={viewedArtistId === 'art-user' ? userProfile : undefined}
-                onEditProfile={() => setIsEditingProfile(true)}
-                onUploadClick={() => setIsUploading(true)}
-              />
-            );
-          }
-          if (viewedPlaylist) {
-            return (
-              <PlaylistDetail
-                playlist={viewedPlaylist}
-                tracks={tracks.filter(t => viewedPlaylist.trackIds.includes(t.id))}
-                currentTrackId={currentTrack?.id}
-                currentAudioUrl={currentTrack?.audioUrl}
-                isPlaying={isPlaying}
-                onBack={navigateToLibrary}
-                onPlayTrack={selectTrack}
-                onPlayVersion={selectTrackVersion}
-                onRemoveFromPlaylist={(trackId) => removeFromPlaylist(viewedPlaylist.id, trackId)}
-              />
-            );
-          }
 
           if (viewedAlbum) {
             const albumTracks = tracks.filter(t => t.album === viewedAlbum);
@@ -415,6 +380,43 @@ const App: React.FC = () => {
                 />
               );
             }
+          }
+
+          if (viewedArtistId) {
+            return (
+              <ArtistProfile
+                artistId={viewedArtistId}
+                tracks={tracks}
+                onBack={navigateToHome}
+                onSelectTrack={selectTrack}
+                currentTrackId={currentTrack?.id}
+                isPlaying={isPlaying}
+                onEdit={setEditingTrack}
+                onNavigateToTrack={navigateToTrack}
+                onNavigateToAlbum={setViewedAlbum}
+                onLike={handleLike}
+                onAddToPlaylist={setTrackToPlaylist}
+                userProfile={viewedArtistId === 'art-user' ? userProfile : undefined}
+                onEditProfile={() => setIsEditingProfile(true)}
+                onUploadClick={() => setIsUploading(true)}
+              />
+            );
+          }
+
+          if (viewedPlaylist) {
+            return (
+              <PlaylistDetail
+                playlist={viewedPlaylist}
+                tracks={tracks.filter(t => viewedPlaylist.trackIds.includes(t.id))}
+                currentTrackId={currentTrack?.id}
+                currentAudioUrl={currentTrack?.audioUrl}
+                isPlaying={isPlaying}
+                onBack={navigateToLibrary}
+                onPlayTrack={selectTrack}
+                onPlayVersion={selectTrackVersion}
+                onRemoveFromPlaylist={(trackId) => removeFromPlaylist(viewedPlaylist.id, trackId)}
+              />
+            );
           }
           if (isLibraryView) {
             return (
