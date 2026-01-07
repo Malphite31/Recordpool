@@ -57,6 +57,58 @@ const App: React.FC = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>('All');
   const [isProcessingUpload, setIsProcessingUpload] = useState(false);
   const [isAdminView, setIsAdminView] = useState(false);
+
+  useEffect(() => {
+    const titleStyle = [
+      'font-size: 60px',
+      'font-weight: bold',
+      'color: #ff5500',
+      'text-shadow: 4px 4px 0px #000',
+      'padding: 10px 0',
+      'line-height: 1',
+      'font-family: system-ui, -apple-system, sans-serif'
+    ].join(';');
+
+    const systemStyle = [
+      'color: #10b981',
+      'font-family: monospace',
+      'font-size: 12px',
+      'background:rgba(0,0,0,0.8)',
+      'padding: 2px 5px',
+      'border-left: 2px solid #10b981',
+      'margin-bottom: 2px'
+    ].join(';');
+
+    const warningBadgeStyle = [
+      'background: #ff5500',
+      'color: #000',
+      'font-weight: bold',
+      'font-size: 12px',
+      'padding: 4px 8px',
+      'border-radius: 4px'
+    ].join(';');
+
+    const warningTextStyle = [
+      'color: #e4e4e7',
+      'font-family: monospace',
+      'font-size: 13px',
+      'margin-top: 4px'
+    ].join(';');
+
+    setTimeout(() => {
+      console.clear();
+      console.log('%cVIBEPOOL', titleStyle);
+      console.log('%c SYSTEM :: Audio Engine.........ONLINE', systemStyle);
+      console.log('%c SYSTEM :: Security Layer.......ACTIVE', systemStyle);
+      console.log('%c SYSTEM :: Vibe Check...........PASSED', systemStyle);
+      console.log('%c SYSTEM :: Owner.................BENZ SIANGCO', systemStyle);
+      console.log('\n');
+      console.log('%c CAUTION: DEVELOPER ZONE ', warningBadgeStyle);
+      console.log('%cThis facility is intended for developers only.', warningTextStyle);
+      console.log('%cPasting code here could compromise your account security.', warningTextStyle);
+      console.log('\n');
+    }, 1000);
+  }, []);
   // ... (existing effects)
 
   // ...
@@ -713,7 +765,58 @@ const App: React.FC = () => {
             />
           )}
         </div>
-      );
     };
+
+    useEffect(() => {
+      const titleStyle = [
+        'font-size: 60px',
+        'font-weight: bold',
+        'color: #ff5500',
+        'text-shadow: 4px 4px 0px #000',
+        'padding: 10px 0',
+        'line-height: 1',
+        'font-family: system-ui, -apple-system, sans-serif'
+      ].join(';');
+
+      const systemStyle = [
+        'color: #10b981',
+        'font-family: monospace',
+        'font-size: 12px',
+        'background:rgba(0,0,0,0.8)',
+        'padding: 2px 5px',
+        'border-left: 2px solid #10b981',
+        'margin-bottom: 2px'
+      ].join(';');
+
+      const warningBadgeStyle = [
+        'background: #ff5500',
+        'color: #000',
+        'font-weight: bold',
+        'font-size: 12px',
+        'padding: 4px 8px',
+        'border-radius: 4px'
+      ].join(';');
+
+      const warningTextStyle = [
+        'color: #e4e4e7',
+        'font-family: monospace',
+        'font-size: 13px',
+        'margin-top: 4px'
+      ].join(';');
+
+      setTimeout(() => {
+        console.clear();
+        console.log('%cVIBEPOOL', titleStyle);
+        console.log('%c SYSTEM :: Audio Engine.........ONLINE', systemStyle);
+        console.log('%c SYSTEM :: Security Layer.......ACTIVE', systemStyle);
+        console.log('%c SYSTEM :: Vibe Check...........PASSED', systemStyle);
+        console.log('%c SYSTEM :: Owner.................BENZ SIANGCO', systemStyle);
+        console.log('\n');
+        console.log('%c CAUTION: DEVELOPER ZONE ', warningBadgeStyle);
+        console.log('%cThis facility is intended for developers only.', warningTextStyle);
+        console.log('%cPasting code here could compromise your account security.', warningTextStyle);
+        console.log('\n');
+      }, 1000);
+    }, []);
 
     export default App;
