@@ -70,6 +70,13 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
         if (e.target.files) processFiles(Array.from(e.target.files));
     };
 
+    const toTitleCase = (str: string) => {
+        return str.replace(
+            /\w\S*/g,
+            text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+        );
+    };
+
     const processFiles = (newFiles: File[]) => {
         const validFiles = newFiles.filter(f => f.type.startsWith('audio/'));
         if (validFiles.length === 0) return;
@@ -78,30 +85,33 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
         let candidateMainTitle = '';
 
         validFiles.forEach((f, idx) => {
-            const name = f.name.replace(/\.[^/.]+$/, "");
+            const nameWithoutExt = f.name.replace(/\.[^/.]+$/, ""); // Strip extension
 
             // Parse "Artist - Title (Version)"
-            const versionMatch = name.match(/\((.*?)\)/);
-            const versionLabel = versionMatch ? versionMatch[1] : 'Original Mix';
+            const versionMatch = nameWithoutExt.match(/\((.*?)\)/);
+            const versionLabel = versionMatch ? toTitleCase(versionMatch[1]) : 'Original Mix';
 
-            let cleanName = name.replace(/\s*\(.*?\)\s*/g, '').trim();
-            let artist = defaultArtist;
+            let baseName = nameWithoutExt.replace(/\s*\(.*?\)\s*/g, '').trim();
+            let trackArtist = defaultArtist;
+            let trackTitle = baseName;
 
             // Try "Artist - Title" split
-            const parts = cleanName.split(' - ');
+            const parts = baseName.split(' - ');
             if (parts.length > 1) {
-                artist = parts[0];
-                cleanName = parts.slice(1).join(' - ');
+                trackArtist = toTitleCase(parts[0].trim());
+                trackTitle = toTitleCase(parts.slice(1).join(' - ').trim());
+            } else {
+                trackTitle = toTitleCase(trackTitle); // Title case even if no artist split
             }
 
-            if (idx === 0) candidateMainTitle = cleanName;
+            if (idx === 0) candidateMainTitle = trackTitle;
 
             // If in versions mode, default to version name
-            const initialTitle = uploadMode === 'versions' ? versionLabel : cleanName;
+            const initialTitle = uploadMode === 'versions' ? versionLabel : trackTitle;
 
             newMeta[f.name] = {
                 title: initialTitle,
-                artist: artist || defaultArtist,
+                artist: trackArtist || defaultArtist,
                 genre: 'Tech House',
                 bpm: '124',
                 key: '1A'
