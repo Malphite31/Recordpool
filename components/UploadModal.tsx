@@ -151,6 +151,22 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
         }
     };
 
+    const handleCoverDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    const handleCoverDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.dataTransfer.files?.[0]) {
+            const file = e.dataTransfer.files[0];
+            if (file.type.startsWith('image/')) {
+                setMainMeta(prev => ({ ...prev, coverFile: file }));
+            }
+        }
+    };
+
     // --- Uploading Logic ---
     const startUpload = () => {
         setStage('uploading');
@@ -297,7 +313,12 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                     {/* Main Metadata */}
                     {stage === 'organize' && (
                         <div className="mb-8 p-6 bg-zinc-900/30 border border-white/5 rounded-3xl grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8">
-                            <div className="relative group cursor-pointer" onClick={() => coverInputRef.current?.click()}>
+                            <div
+                                className="relative group cursor-pointer"
+                                onClick={() => coverInputRef.current?.click()}
+                                onDragOver={handleCoverDragOver}
+                                onDrop={handleCoverDrop}
+                            >
                                 <input ref={coverInputRef} type="file" accept="image/*" className="hidden" onChange={handleCoverSelect} />
                                 <div className="aspect-square rounded-2xl bg-zinc-900 border-2 border-dashed border-zinc-700 flex flex-col items-center justify-center overflow-hidden hover:border-[#ff5500] transition-colors">
                                     {mainMeta.coverFile ? (
