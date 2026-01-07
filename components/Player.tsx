@@ -194,7 +194,13 @@ const Player: React.FC<PlayerProps> = ({
           <div className="col-span-4 md:col-span-3 flex items-center justify-end gap-6 h-full min-w-0">
             {/* Visualizer - Moved to right group */}
             <div className="hidden md:flex flex-1 max-w-[140px] h-[32px] items-center justify-end">
-              <Visualizer analyser={analyser} isPlaying={isPlaying} volume={volume} onVolumeChange={setVolume} />
+              <Visualizer
+                key={track.audioUrl}
+                analyser={analyser}
+                isPlaying={isPlaying}
+                volume={volume}
+                onVolumeChange={setVolume}
+              />
             </div>
 
             <div className="flex items-center gap-3 md:gap-4 bg-zinc-900/60 rounded-2xl px-4 md:px-5 py-2.5 border border-white/5 shadow-inner shrink-0">
