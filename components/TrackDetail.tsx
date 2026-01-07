@@ -31,12 +31,21 @@ const TrackDetail: React.FC<TrackDetailProps> = ({
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const [progress, setProgress] = useState(0);
 
+  const isActive = currentAudioUrl === track.audioUrl || track.versions?.some(v => v.audioUrl === currentAudioUrl);
+
   useEffect(() => {
+    if (!isActive) {
+      setProgress(0);
+      return;
+    }
+
     const audioEl = document.querySelector('audio');
     if (!audioEl) return;
 
     const updateProgress = () => setProgress(audioEl.currentTime / audioEl.duration || 0);
     audioEl.addEventListener('timeupdate', updateProgress);
+    // Initialize progress immediately in case already playing
+    updateProgress();
 
     if (!analyser) {
       try {
@@ -64,7 +73,7 @@ const TrackDetail: React.FC<TrackDetailProps> = ({
       }
     }
     return () => audioEl.removeEventListener('timeupdate', updateProgress);
-  }, [track, analyser]);
+  }, [track, analyser, isActive]);
 
   const handleSeek = (newProgress: number) => {
     const audioEl = document.querySelector('audio');
