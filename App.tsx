@@ -469,31 +469,69 @@ const App: React.FC = () => {
       {isUploading && (
         <UploadModal
           onClose={() => setIsUploading(false)}
-          onUpload={async (files) => {
-            // Mock processing logic since we don't have a real backend
-            const newTracks = await Promise.all(files.map(async file => {
-              const url = URL.createObjectURL(file);
-              const peaks = await extractPeaks(url);
-              return {
+          onUpload={async (result) => {
+            const { mode, items, mainMetadata } = result;
+
+            if (mode === 'individual') {
+              const newTracks = await Promise.all(items.map(async (item) => {
+                const url = URL.createObjectURL(item.file);
+                const peaks = await extractPeaks(url);
+                return {
+                  id: Math.random().toString(36).substr(2, 9),
+                  artistId: 'art-user',
+                  title: item.customMeta.title || item.file.name,
+                  artist: item.customMeta.artist || userProfile.name,
+                  bpm: parseInt(item.customMeta.bpm) || 124,
+                  key: item.customMeta.key || '1A',
+                  genre: item.customMeta.genre || 'Tech House',
+                  duration: '4:00',
+                  coverUrl: `https://picsum.photos/seed/${item.file.name}/400/400`,
+                  audioUrl: url,
+                  downloadCount: 0,
+                  likeCount: 0,
+                  repostCount: 0,
+                  peaks: peaks,
+                  versions: []
+                } as Track;
+              }));
+              setTracks(prev => [...newTracks, ...prev]);
+            } else {
+              const coverUrl = mainMetadata?.coverFile ? URL.createObjectURL(mainMetadata.coverFile) : `https://picsum.photos/seed/${mainMetadata?.title || 'cover'}/400/400`;
+
+              const versions = await Promise.all(items.map(async (item, idx) => {
+                return {
+                  id: Math.random().toString(36).substr(2, 9),
+                  name: item.customMeta.title || `Version ${idx + 1}`,
+                  duration: '4:00',
+                  bpm: item.customMeta.bpm || '124',
+                  key: item.customMeta.key || '1A',
+                  audioUrl: URL.createObjectURL(item.file),
+                  format: 'MP3'
+                };
+              }));
+
+              const peaks = await extractPeaks(versions[0].audioUrl);
+
+              const newTrack: Track = {
                 id: Math.random().toString(36).substr(2, 9),
                 artistId: 'art-user',
-                title: file.name.replace(/\.[^/.]+$/, ""),
-                artist: userProfile.name,
-                bpm: 124,
-                key: '1A',
-                genre: 'Tech House',
-                duration: '4:52',
-                coverUrl: `https://picsum.photos/seed/${file.name}/400/400`,
-                audioUrl: url,
+                title: mainMetadata?.title || 'Unknown Title',
+                artist: mainMetadata?.artist || userProfile.name,
+                bpm: parseInt(items[0].customMeta.bpm) || 124,
+                key: items[0].customMeta.key || '1A',
+                genre: mainMetadata?.genre || 'Tech House',
+                duration: versions[0].duration,
+                coverUrl: coverUrl,
+                audioUrl: versions[0].audioUrl,
                 downloadCount: 0,
                 likeCount: 0,
                 repostCount: 0,
                 peaks: peaks,
-                versions: []
-              } as Track;
-            }));
-            setTracks(prev => [...newTracks, ...prev]);
-            setTimeout(() => setIsUploading(false), 500);
+                versions: versions
+              };
+              setTracks(prev => [newTrack, ...prev]);
+            }
+            setIsUploading(false);
           }}
         />
       )}
