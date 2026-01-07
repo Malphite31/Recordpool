@@ -253,7 +253,12 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
 
     return (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in">
-            <div className="bg-[#0c0c0e] w-full max-w-5xl h-[85vh] rounded-[32px] border border-white/5 flex flex-col shadow-2xl relative overflow-hidden">
+            <div
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={`bg-[#0c0c0e] w-full max-w-5xl h-[85vh] rounded-[32px] border border-white/5 flex flex-col shadow-2xl relative overflow-hidden transition-all ${isDragOver ? 'border-[#ff5500] bg-[#ff5500]/5 scale-[1.01]' : ''}`}
+            >
 
                 {/* Header */}
                 <div className="px-8 py-6 border-b border-white/5 bg-zinc-900/30 flex justify-between items-center shrink-0">
@@ -461,48 +466,46 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                 </div>
                             );
                         })}
+
+                        {stage === 'organize' && (
+                            <div
+                                onClick={() => addMoreInputRef.current?.click()}
+                                className="border-2 border-dashed border-white/5 rounded-2xl p-4 flex items-center justify-center gap-3 text-zinc-500 hover:text-white hover:border-[#ff5500]/50 hover:bg-[#ff5500]/5 transition-all cursor-pointer group"
+                            >
+                                <div className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-[#ff5500] flex items-center justify-center transition-colors text-inherit group-hover:text-white">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                                </div>
+                                <span className="text-[10px] font-bold uppercase tracking-widest">Drag more files or click to add</span>
+                            </div>
+                        )}
                     </div>
 
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-white/5 bg-zinc-900/30 flex justify-between items-center shrink-0">
-                    <div>
-                        <input
-                            ref={addMoreInputRef}
-                            type="file"
-                            multiple
-                            accept="audio/*"
-                            className="hidden"
-                            onChange={handleFileSelect}
-                        />
-                        {stage === 'organize' && (
-                            <button
-                                onClick={() => addMoreInputRef.current?.click()}
-                                className="flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                                Add More Songs
-                            </button>
-                        )}
-                    </div>
-
-                    <div className="flex gap-3">
-                        <button onClick={onClose} disabled={stage === 'uploading'} className="px-6 py-3 rounded-xl font-bold uppercase text-[11px] tracking-widest text-zinc-400 hover:text-white hover:bg-white/5 transition-colors disabled:opacity-50">
-                            Cancel
+                <div className="p-6 border-t border-white/5 bg-zinc-900/30 flex justify-end gap-3 shrink-0">
+                    <input
+                        ref={addMoreInputRef}
+                        type="file"
+                        multiple
+                        accept="audio/*"
+                        className="hidden"
+                        onChange={handleFileSelect}
+                    />
+                    <button onClick={onClose} disabled={stage === 'uploading'} className="px-6 py-3 rounded-xl font-bold uppercase text-[11px] tracking-widest text-zinc-400 hover:text-white hover:bg-white/5 transition-colors disabled:opacity-50">
+                        Cancel
+                    </button>
+                    {stage === 'organize' && (
+                        <button
+                            onClick={startUpload}
+                            className="bg-[#ff5500] text-white px-8 py-3 rounded-xl font-black uppercase text-[11px] tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl"
+                        >
+                            Start Upload
                         </button>
-                        {stage === 'organize' && (
-                            <button
-                                onClick={startUpload}
-                                className="bg-[#ff5500] text-white px-8 py-3 rounded-xl font-black uppercase text-[11px] tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl"
-                            >
-                                Start Upload
-                            </button>
-                        )}
-                    </div>
+                    )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
