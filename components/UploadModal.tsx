@@ -380,14 +380,38 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                             </div>
 
                                             <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
-                                                {/* If Individual: Title & Artist. If Version: Version Name */}
-                                                <div className={`${uploadMode === 'individual' ? 'md:col-span-5' : 'md:col-span-8'}`}>
+                                                {/* Version Type Selector */}
+                                                {uploadMode === 'versions' && (
+                                                    <div className="md:col-span-3">
+                                                        <div className="relative">
+                                                            <select
+                                                                value={["Original Mix", "Extended Mix", "Radio Edit", "Instrumental", "Clean", "Dirty", "Acapella", "Intro Edit"].includes(meta.title) ? meta.title : 'Custom'}
+                                                                onChange={e => {
+                                                                    if (e.target.value !== 'Custom') {
+                                                                        updateFileMeta(file.name, 'title', e.target.value);
+                                                                    }
+                                                                }}
+                                                                className="w-full bg-zinc-950 border border-white/10 rounded-lg pl-3 pr-8 py-2 text-white text-xs md:text-sm focus:border-[#ff5500] outline-none appearance-none cursor-pointer font-medium"
+                                                            >
+                                                                <option value="Custom" className="bg-zinc-900 text-zinc-500">Select Type...</option>
+                                                                {["Original Mix", "Extended Mix", "Radio Edit", "Instrumental", "Clean", "Dirty", "Acapella", "Intro Edit"].map(t => (
+                                                                    <option key={t} value={t} className="bg-zinc-900">{t}</option>
+                                                                ))}
+                                                            </select>
+                                                            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500">
+                                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                <div className={`${uploadMode === 'individual' ? 'md:col-span-5' : 'md:col-span-5'}`}>
                                                     <input
                                                         type="text"
-                                                        placeholder={uploadMode === 'individual' ? "Track Title" : "Version Name (e.g. Extended Mix)"}
+                                                        placeholder={uploadMode === 'individual' ? "Track Title" : "Version Name"}
                                                         value={meta.title}
                                                         onChange={e => updateFileMeta(file.name, 'title', e.target.value)}
-                                                        className="w-full bg-zinc-950 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-[#ff5500] outline-none"
+                                                        className="w-full bg-zinc-950 border border-white/10 rounded-lg px-3 py-2 text-white text-xs md:text-sm focus:border-[#ff5500] outline-none"
                                                     />
                                                 </div>
 
@@ -398,7 +422,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                                             placeholder="Artist"
                                                             value={meta.artist}
                                                             onChange={e => updateFileMeta(file.name, 'artist', e.target.value)}
-                                                            className="w-full bg-zinc-950 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-[#ff5500] outline-none"
+                                                            className="w-full bg-zinc-950 border border-white/10 rounded-lg px-3 py-2 text-white text-xs md:text-sm focus:border-[#ff5500] outline-none"
                                                         />
                                                     </div>
                                                 )}
