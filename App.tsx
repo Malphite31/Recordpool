@@ -576,6 +576,10 @@ const App: React.FC = () => {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
               <span className="text-[8px] font-black uppercase tracking-widest truncate w-full text-center">Genres</span>
             </button>
+            <button onClick={() => setIsAdminView(true)} className={`flex flex-col items-center gap-1.5 flex-1 min-w-0 ${isAdminView ? 'text-[#ff5500]' : 'text-zinc-600'}`}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6V4m0 2a2 2 0 100 4 2 2 0 000-4zm0 14v-2m0 0a2 2 0 100-4 2 2 0 000 4zm-8.146-7.854l-1.414-1.414m1.414 1.414a2 2 0 102.828-2.828 2 2 0 00-2.828 2.828zm14.292 2.828l1.414 1.414m-1.414-1.414a2 2 0 102.828 2.828 2 2 0 00-2.828-2.828z" /></svg>
+              <span className="text-[8px] font-black uppercase tracking-widest truncate w-full text-center">Admin</span>
+            </button>
             <button onClick={navigateToMyProfile} className={`flex flex-col items-center gap-1.5 flex-1 min-w-0 ${viewedArtistId === 'art-user' ? 'text-[#ff5500]' : 'text-zinc-600'}`}>
               <div className={`w-5 h-5 rounded-full overflow-hidden border ${viewedArtistId === 'art-user' ? 'border-[#ff5500]' : 'border-zinc-800'}`}>
                 <img src={userProfile.avatarUrl} className="w-full h-full object-cover" />
