@@ -63,9 +63,9 @@ const ArtistProfile: React.FC<ArtistProfileProps> = ({
           </div>
 
           <div className="flex-1 space-y-2 md:space-y-4 text-center md:text-left pb-1 md:pb-4">
-            <h1 className="text-3xl md:text-6xl font-black text-white leading-none tracking-tighter filter drop-shadow-2xl flex items-center md:justify-start justify-center gap-3 md:gap-6">
+            <h1 className="text-2xl md:text-6xl font-black text-white leading-none tracking-tighter filter drop-shadow-2xl flex items-center md:justify-start justify-center gap-2 md:gap-6">
               {profileName}
-              <svg className="w-8 h-8 md:w-12 md:h-12 text-[#1d9bf0]" viewBox="0 0 40 40" fill="currentColor">
+              <svg className="w-5 h-5 md:w-12 md:h-12 text-[#1d9bf0]" viewBox="0 0 40 40" fill="currentColor">
                 <path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fillRule="evenodd" />
               </svg>
             </h1>
