@@ -28,9 +28,10 @@ export interface UploadBatchResult {
 interface UploadModalProps {
     onClose: () => void;
     onUpload: (result: UploadBatchResult) => void;
+    defaultArtist?: string;
 }
 
-const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload }) => {
+const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArtist = '' }) => {
     // Stages: 'drop' -> 'organize' -> 'uploading' -> 'done'
     const [stage, setStage] = useState<'drop' | 'organize' | 'uploading' | 'done'>('drop');
     const [isDragOver, setIsDragOver] = useState(false);
@@ -42,7 +43,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload }) => {
     // Metadata State
     const [mainMeta, setMainMeta] = useState({
         title: '',
-        artist: '',
+        artist: defaultArtist,
         genre: 'Tech House',
         description: '',
         coverFile: null as File | null
@@ -73,29 +74,47 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload }) => {
         const validFiles = newFiles.filter(f => f.type.startsWith('audio/'));
         if (validFiles.length === 0) return;
 
-        setFiles(prev => [...prev, ...validFiles]);
-
-        // Initialize metadata for new files
         const newMeta = { ...fileMeta };
-        validFiles.forEach(f => {
-            const name = f.name.replace(/\.[^/.]+$/, ""); // Strip extension
-            // Heuristic to split Artist - Title if possible? 
-            // Assuming "Artist - Title" format for individual defaults
-            const parts = name.split(' - ');
-            const artist = parts.length > 1 ? parts[0] : '';
-            const title = parts.length > 1 ? parts.slice(1).join(' - ') : name;
+        let candidateMainTitle = '';
+
+        validFiles.forEach((f, idx) => {
+            const name = f.name.replace(/\.[^/.]+$/, "");
+
+            // Parse "Artist - Title (Version)"
+            const versionMatch = name.match(/\((.*?)\)/);
+            const versionLabel = versionMatch ? versionMatch[1] : 'Original Mix';
+
+            let cleanName = name.replace(/\s*\(.*?\)\s*/g, '').trim();
+            let artist = defaultArtist;
+
+            // Try "Artist - Title" split
+            const parts = cleanName.split(' - ');
+            if (parts.length > 1) {
+                artist = parts[0];
+                cleanName = parts.slice(1).join(' - ');
+            }
+
+            if (idx === 0) candidateMainTitle = cleanName;
+
+            // If in versions mode, default to version name
+            const initialTitle = uploadMode === 'versions' ? versionLabel : cleanName;
 
             newMeta[f.name] = {
-                title: title,
-                artist: artist,
+                title: initialTitle,
+                artist: artist || defaultArtist,
                 genre: 'Tech House',
                 bpm: '124',
                 key: '1A'
             };
         });
-        setFileMeta(newMeta);
 
-        // If we were in drop stage, move to organize
+        setFiles(prev => [...prev, ...validFiles]);
+        setFileMeta(prev => ({ ...prev, ...newMeta }));
+
+        if (!mainMeta.title && candidateMainTitle) {
+            setMainMeta(prev => ({ ...prev, title: candidateMainTitle }));
+        }
+
         if (stage === 'drop') setStage('organize');
     };
 
@@ -164,6 +183,32 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload }) => {
             }
         };
     };
+
+    useEffect(() => {
+        setFileMeta(prev => {
+            const next = { ...prev };
+            files.forEach(f => {
+                const name = f.name.replace(/\.[^/.]+$/, "");
+                const versionMatch = name.match(/\((.*?)\)/);
+                const versionLabel = versionMatch ? versionMatch[1] : 'Original Mix';
+                let cleanName = name.replace(/\s*\(.*?\)\s*/g, '').trim();
+
+                const parts = cleanName.split(' - ');
+                if (parts.length > 1) {
+                    cleanName = parts.slice(1).join(' - ');
+                }
+
+                if (uploadMode === 'versions') {
+                    // Update to Version Name
+                    if (next[f.name]) next[f.name].title = versionLabel;
+                } else {
+                    // Update to Track Title
+                    if (next[f.name]) next[f.name].title = cleanName;
+                }
+            });
+            return next;
+        });
+    }, [uploadMode, files]);
 
     // --- Renders ---
 

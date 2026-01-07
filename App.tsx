@@ -468,6 +468,7 @@ const App: React.FC = () => {
 
       {isUploading && (
         <UploadModal
+          defaultArtist={userProfile.name}
           onClose={() => setIsUploading(false)}
           onUpload={async (result) => {
             const { mode, items, mainMetadata } = result;
