@@ -19,6 +19,8 @@ const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onDelete
     album: track.album || '', // Add Album support
   });
 
+  const [audioFile, setAudioFile] = useState<File | null>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -29,7 +31,11 @@ const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onDelete
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({ ...track, ...formData } as Track);
+    const updatedTrack = { ...track, ...formData };
+    if (audioFile) {
+      updatedTrack.audioUrl = URL.createObjectURL(audioFile);
+    }
+    onSave(updatedTrack as Track);
   };
 
   return (
@@ -52,6 +58,22 @@ const EditTrackModal: React.FC<EditTrackModalProps> = ({ track, onSave, onDelete
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div className="space-y-2 col-span-2">
+              <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">Audio File</label>
+              <div className="flex items-center gap-4">
+                <div className="flex-1 bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-zinc-400 text-sm truncate font-medium">
+                  {audioFile ? audioFile.name : "Current Audio File"}
+                </div>
+                <label className="bg-white/5 hover:bg-white/10 text-white px-4 py-3 rounded-xl cursor-pointer transition-colors font-bold text-xs uppercase tracking-wider border border-white/5 hover:border-white/20">
+                  Replace File
+                  <input type="file" accept="audio/*" className="hidden" onChange={(e) => {
+                    if (e.target.files?.[0]) setAudioFile(e.target.files[0]);
+                  }} />
+                </label>
+              </div>
+            </div>
+
             <div className="space-y-2 col-span-2">
               <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest px-1">Track Title</label>
               <input

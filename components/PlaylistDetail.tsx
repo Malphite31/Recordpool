@@ -12,6 +12,8 @@ interface PlaylistDetailProps {
   onPlayTrack: (track: Track) => void;
   onPlayVersion?: (track: Track, version: TrackVersion) => void;
   onRemoveFromPlaylist: (trackId: string) => void;
+  isOwner?: boolean;
+  onUpload?: () => void;
 }
 
 const PlaylistDetail: React.FC<PlaylistDetailProps> = ({
@@ -23,7 +25,9 @@ const PlaylistDetail: React.FC<PlaylistDetailProps> = ({
   onBack,
   onPlayTrack,
   onPlayVersion,
-  onRemoveFromPlaylist
+  onRemoveFromPlaylist,
+  isOwner,
+  onUpload
 }) => {
   const [expandedTrackId, setExpandedTrackId] = useState<string | null>(null);
 
@@ -80,6 +84,17 @@ const PlaylistDetail: React.FC<PlaylistDetailProps> = ({
             >
               Play All
             </button>
+
+            {isOwner && onUpload && (
+              <button
+                onClick={onUpload}
+                className="bg-[#ff5500] text-white px-6 py-2.5 md:px-8 md:py-3.5 rounded-2xl font-black uppercase text-[11px] tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#ff5500]/20 flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" strokeWidth={3} /></svg>
+                Add Track
+              </button>
+            )}
+
             <button className="bg-transparent text-white border border-white/10 px-6 py-2.5 md:px-6 md:py-3.5 rounded-2xl font-black uppercase text-[11px] tracking-widest hover:bg-white/5 active:scale-95 transition-all">
               Shuffle
             </button>
@@ -145,7 +160,6 @@ const PlaylistDetail: React.FC<PlaylistDetailProps> = ({
                   </div>
                 </div>
 
-                {/* Expanded Versions View */}
                 {isExpanded && (
                   <div className="mt-1 mb-3 mx-2 space-y-1 animate-in slide-in-from-top-2 duration-300">
                     <div className="px-4 py-2 text-[8px] font-black uppercase tracking-widest text-zinc-700">Available Mixes</div>

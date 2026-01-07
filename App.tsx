@@ -384,6 +384,8 @@ const App: React.FC = () => {
                   onPlayTrack={selectTrack}
                   onPlayVersion={selectTrackVersion}
                   onRemoveFromPlaylist={() => { }}
+                  isOwner={albumTracks[0].artistId === 'art-user'}
+                  onUpload={() => setIsUploading(true)}
                 />
               );
             }

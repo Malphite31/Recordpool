@@ -31,9 +31,10 @@ interface UploadModalProps {
     onUpload: (result: UploadBatchResult) => void;
     defaultArtist?: string;
     existingAlbums?: string[];
+    defaultAlbum?: string;
 }
 
-const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArtist = '', existingAlbums = [] }) => {
+const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArtist = '', existingAlbums = [], defaultAlbum = '' }) => {
     // Stages: 'drop' -> 'organize' -> 'uploading' -> 'done'
     const [stage, setStage] = useState<'drop' | 'organize' | 'uploading' | 'done'>('drop');
     const [isDragOver, setIsDragOver] = useState(false);
@@ -46,7 +47,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
     const [mainMeta, setMainMeta] = useState({
         title: '',
         artist: defaultArtist,
-        album: '',
+        album: defaultAlbum,
         genre: 'Tech House',
         description: '',
         coverFile: null as File | null
@@ -286,13 +287,13 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
             >
 
                 {/* Header */}
-                <div className="px-8 py-6 border-b border-white/5 bg-zinc-900/30 flex justify-between items-center shrink-0">
+                <div className="px-4 md:px-8 py-6 border-b border-white/5 bg-zinc-900/30 flex justify-between items-center shrink-0">
                     <div className="flex items-center gap-4">
                         <div className="w-10 h-10 rounded-full bg-[#ff5500] flex items-center justify-center font-black text-white">
                             {stage === 'uploading' ? <span className="animate-spin">⟳</span> : files.length}
                         </div>
                         <div>
-                            <h2 className="text-xl font-black text-white uppercase tracking-tight">
+                            <h2 className="text-lg md:text-xl font-black text-white uppercase tracking-tight">
                                 {stage === 'uploading' ? 'Uploading...' : 'Review & Release'}
                             </h2>
                             <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">{files.length} Files Selected</p>
@@ -342,7 +343,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                             </div>
                             <div className="space-y-4">
                                 <h3 className="text-white font-bold mb-2">Main Release Info</h3>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <input
                                         type="text"
                                         placeholder={uploadMode === 'individual' ? "Album Title" : "Song Title"}
@@ -358,7 +359,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                         className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
                                     />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {uploadMode === 'versions' && (
                                         <div className="relative group">
                                             <input
@@ -384,7 +385,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                         placeholder="Genre"
                                         value={mainMeta.genre}
                                         onChange={e => setMainMeta(p => ({ ...p, genre: e.target.value }))}
-                                        className={`bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none ${uploadMode === 'individual' ? 'col-span-2' : ''}`}
+                                        className={`bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none ${uploadMode === 'individual' ? 'md:col-span-2' : ''}`}
                                     />
                                 </div>
                                 <div>
