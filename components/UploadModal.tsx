@@ -173,16 +173,18 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
     };
 
     // --- Uploading Logic ---
+    const [hasTriggered, setHasTriggered] = useState(false);
+
+    // --- Uploading Logic ---
     const startUpload = () => {
         if (stage === 'uploading') return;
         setStage('uploading');
+        setHasTriggered(false);
 
         // Initialize progress
         const initProgress: Record<string, number> = {};
         files.forEach(f => initProgress[f.name] = 0);
         setUploadProgress(initProgress);
-
-        let completed = 0;
 
         files.forEach(file => {
             const interval = setInterval(() => {
@@ -193,17 +195,18 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                         return prev;
                     }
                     const next = Math.min(100, current + Math.random() * 15 + 5);
-                    if (next === 100) {
-                        completed++;
-                        checkDone();
-                    }
                     return { ...prev, [file.name]: next };
                 });
             }, 300);
         });
+    };
 
-        const checkDone = () => {
-            if (completed >= files.length) {
+    // Watch for completion
+    useEffect(() => {
+        if (stage === 'uploading' && !hasTriggered && files.length > 0) {
+            const allDone = files.every(f => (uploadProgress[f.name] || 0) >= 100);
+            if (allDone) {
+                setHasTriggered(true);
                 setTimeout(() => {
                     const result: UploadBatchResult = {
                         mode: uploadMode,
@@ -216,8 +219,8 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                     onUpload(result);
                 }, 800);
             }
-        };
-    };
+        }
+    }, [uploadProgress, stage, hasTriggered, files, uploadMode, mainMeta, fileMeta, onUpload]);
 
     useEffect(() => {
         setFileMeta(prev => {
@@ -243,7 +246,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
             });
             return next;
         });
-    }, [uploadMode, files]);
+    }, [uploadMode]); // Removed files dependency to prevent overwriting manual edits on file add
 
     // --- Renders ---
 
