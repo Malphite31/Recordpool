@@ -527,7 +527,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-white/5 bg-zinc-900/30 flex justify-end gap-3 shrink-0">
+                <div className="p-4 md:p-6 border-t border-white/5 bg-zinc-900/30 flex justify-end gap-3 shrink-0">
                     <input
                         ref={addMoreInputRef}
                         type="file"
@@ -536,13 +536,13 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                         className="hidden"
                         onChange={handleFileSelect}
                     />
-                    <button onClick={onClose} disabled={stage === 'uploading'} className="px-6 py-3 rounded-xl font-bold uppercase text-[11px] tracking-widest text-zinc-400 hover:text-white hover:bg-white/5 transition-colors disabled:opacity-50">
+                    <button onClick={onClose} disabled={stage === 'uploading'} className="px-4 py-2 md:px-6 md:py-3 rounded-xl font-bold uppercase text-[10px] md:text-[11px] tracking-widest text-zinc-400 hover:text-white hover:bg-white/5 transition-colors disabled:opacity-50">
                         Cancel
                     </button>
                     {stage === 'organize' && (
                         <button
                             onClick={startUpload}
-                            className="bg-[#ff5500] text-white px-8 py-3 rounded-xl font-black uppercase text-[11px] tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl"
+                            className="bg-[#ff5500] text-white px-6 py-2 md:px-8 md:py-3 rounded-xl font-black uppercase text-[10px] md:text-[11px] tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-xl"
                         >
                             Start Upload
                         </button>
