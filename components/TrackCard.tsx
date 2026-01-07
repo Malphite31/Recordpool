@@ -35,6 +35,12 @@ const TrackCard: React.FC<TrackCardProps> = ({
           className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-110"
         />
 
+        {track.isAlbum && (
+          <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-md text-[#ff5500] text-[8px] font-black uppercase tracking-widest px-2 py-1 rounded-full border border-[#ff5500]/20 z-10 shadow-xl">
+            Album
+          </div>
+        )}
+
         {isCurrent && isPlaying ? (
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
             <div className="w-12 h-12 bg-[#ff5500] rounded-full flex items-center justify-center shadow-2xl">

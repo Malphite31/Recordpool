@@ -13,6 +13,7 @@ export interface Track {
   artistId: string;
   artist: string;
   album?: string;
+  isAlbum?: boolean;
   artistBio?: string;
   artistAvatarUrl?: string;
   artistHeaderUrl?: string;

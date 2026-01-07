@@ -40,6 +40,7 @@ const App: React.FC = () => {
   const [viewedTrack, setViewedTrack] = useState<Track | null>(null);
   const [viewedArtistId, setViewedArtistId] = useState<string | null>(null);
   const [viewedPlaylist, setViewedPlaylist] = useState<Playlist | null>(null);
+  const [viewedAlbum, setViewedAlbum] = useState<string | null>(null);
   const [isLibraryView, setIsLibraryView] = useState(false);
   const [isArtistsView, setIsArtistsView] = useState(false);
   const [isGenresView, setIsGenresView] = useState(false);
@@ -155,6 +156,28 @@ const App: React.FC = () => {
     return matchesSearch && matchesGenre;
   });
 
+  const displayTracks = filteredTracks.reduce((acc: Track[], track) => {
+    if (track.album) {
+      // Check if we already added a group for this album
+      const existingGroup = acc.find(t => t.isAlbum && t.title === track.album);
+      if (existingGroup) return acc;
+
+      const albumTracks = filteredTracks.filter(t => t.album === track.album);
+      if (albumTracks.length > 1) {
+        acc.push({
+          ...track,
+          title: track.album,
+          isAlbum: true
+        });
+      } else {
+        acc.push(track);
+      }
+    } else {
+      acc.push(track);
+    }
+    return acc;
+  }, []);
+
   const handleNext = () => {
     const pool = viewedPlaylist
       ? tracks.filter(t => viewedPlaylist.trackIds.includes(t.id))
@@ -255,6 +278,7 @@ const App: React.FC = () => {
     setViewedTrack(null);
     setViewedArtistId(null);
     setViewedPlaylist(null);
+    setViewedAlbum(null);
     setIsLibraryView(false);
     setIsArtistsView(false);
     setIsGenresView(false);
@@ -364,6 +388,33 @@ const App: React.FC = () => {
               />
             );
           }
+
+          if (viewedAlbum) {
+            const albumTracks = tracks.filter(t => t.album === viewedAlbum);
+            if (albumTracks.length > 0) {
+              const mockPlaylist: Playlist = {
+                id: 'alb-' + viewedAlbum,
+                name: viewedAlbum,
+                description: albumTracks[0].artist,
+                coverUrl: albumTracks[0].coverUrl,
+                trackIds: albumTracks.map(t => t.id),
+                createdAt: Date.now()
+              };
+              return (
+                <PlaylistDetail
+                  playlist={mockPlaylist}
+                  tracks={albumTracks}
+                  currentTrackId={currentTrack?.id}
+                  currentAudioUrl={currentTrack?.audioUrl}
+                  isPlaying={isPlaying}
+                  onBack={() => setViewedAlbum(null)}
+                  onPlayTrack={selectTrack}
+                  onPlayVersion={selectTrackVersion}
+                  onRemoveFromPlaylist={() => { }}
+                />
+              );
+            }
+          }
           if (isLibraryView) {
             return (
               <LibraryView
@@ -412,16 +463,22 @@ const App: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-4 md:gap-x-8 gap-y-10">
-                {filteredTracks.map(track => (
+                {displayTracks.map(track => (
                   <TrackCard
                     key={track.id}
                     track={track}
                     isCurrent={currentTrack?.id === track.id}
                     isPlaying={isPlaying}
-                    onSelect={() => selectTrack(track)}
+                    onSelect={() => {
+                      if (track.isAlbum) {
+                        setViewedAlbum(track.album || null);
+                      } else {
+                        selectTrack(track);
+                      }
+                    }}
                     onEdit={setEditingTrack}
                     onLike={() => handleLike(track.id)}
-                    onNavigate={() => navigateToTrack(track)}
+                    onNavigate={() => track.isAlbum ? setViewedAlbum(track.album || null) : navigateToTrack(track)}
                   />
                 ))}
               </div>
