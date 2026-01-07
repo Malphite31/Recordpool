@@ -77,10 +77,10 @@ const PlaylistDetail: React.FC<PlaylistDetailProps> = ({
             {tracks.length} Pool Selected Tracks
           </p>
 
-          <div className="flex items-center justify-center gap-3 pt-6">
+          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 pt-4 md:pt-6">
             <button
               onClick={() => tracks[0] && onPlayTrack(tracks[0])}
-              className="bg-white text-black px-6 py-2.5 md:px-8 md:py-3.5 rounded-2xl font-black uppercase text-[11px] tracking-widest hover:brightness-90 active:scale-95 transition-all"
+              className="bg-white text-black px-4 py-2 md:px-8 md:py-3.5 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-[11px] tracking-widest hover:brightness-90 active:scale-95 transition-all whitespace-nowrap"
             >
               Play All
             </button>
@@ -88,18 +88,18 @@ const PlaylistDetail: React.FC<PlaylistDetailProps> = ({
             {isOwner && onUpload && (
               <button
                 onClick={onUpload}
-                className="bg-[#ff5500] text-white px-6 py-2.5 md:px-8 md:py-3.5 rounded-2xl font-black uppercase text-[11px] tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#ff5500]/20 flex items-center gap-2"
+                className="bg-[#ff5500] text-white px-4 py-2 md:px-8 md:py-3.5 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-[11px] tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#ff5500]/20 flex items-center gap-1.5 md:gap-2 whitespace-nowrap"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" strokeWidth={3} /></svg>
+                <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" strokeWidth={3} /></svg>
                 Add Track
               </button>
             )}
 
-            <button className="bg-transparent text-white border border-white/10 px-6 py-2.5 md:px-6 md:py-3.5 rounded-2xl font-black uppercase text-[11px] tracking-widest hover:bg-white/5 active:scale-95 transition-all">
+            <button className="bg-transparent text-white border border-white/10 px-4 py-2 md:px-6 md:py-3.5 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-[11px] tracking-widest hover:bg-white/5 active:scale-95 transition-all whitespace-nowrap">
               Shuffle
             </button>
-            <button className="w-12 h-12 rounded-2xl border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-all active:scale-90">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8m-4-6l-4-4m0 0l-4 4m4-4v13" strokeWidth={2.5} /></svg>
+            <button className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl border border-white/10 flex items-center justify-center text-white hover:bg-white/5 transition-all active:scale-90 shrink-0">
+              <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8m-4-6l-4-4m0 0l-4 4m4-4v13" strokeWidth={2.5} /></svg>
             </button>
           </div>
         </div>
