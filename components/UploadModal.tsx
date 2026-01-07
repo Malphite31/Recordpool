@@ -185,7 +185,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                 setTimeout(() => {
                     const result: UploadBatchResult = {
                         mode: uploadMode,
-                        mainMetadata: uploadMode === 'versions' ? mainMeta : undefined,
+                        mainMetadata: mainMeta,
                         items: files.map(f => ({
                             file: f,
                             customMeta: fileMeta[f.name]
@@ -279,13 +279,13 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                 onClick={() => setUploadMode('individual')}
                                 className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${uploadMode === 'individual' ? 'bg-white text-black shadow-lg' : 'text-zinc-500 hover:text-white'}`}
                             >
-                                Individual Releases
+                                Album
                             </button>
                             <button
                                 onClick={() => setUploadMode('versions')}
                                 className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${uploadMode === 'versions' ? 'bg-white text-black shadow-lg' : 'text-zinc-500 hover:text-white'}`}
                             >
-                                DJ Edits
+                                Song Upload
                             </button>
                         </div>
                     )}
@@ -294,8 +294,8 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                 {/* Content */}
                 <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
 
-                    {/* Versions Mode: Main Metadata */}
-                    {uploadMode === 'versions' && stage === 'organize' && (
+                    {/* Main Metadata */}
+                    {stage === 'organize' && (
                         <div className="mb-8 p-6 bg-zinc-900/30 border border-white/5 rounded-3xl grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8">
                             <div className="relative group cursor-pointer" onClick={() => coverInputRef.current?.click()}>
                                 <input ref={coverInputRef} type="file" accept="image/*" className="hidden" onChange={handleCoverSelect} />
@@ -315,33 +315,35 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                 <div className="grid grid-cols-2 gap-4">
                                     <input
                                         type="text"
-                                        placeholder="Release Title"
+                                        placeholder={uploadMode === 'individual' ? "Album Title" : "Song Title"}
                                         value={mainMeta.title}
                                         onChange={e => setMainMeta(p => ({ ...p, title: e.target.value }))}
                                         className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
                                     />
                                     <input
                                         type="text"
-                                        placeholder="Main Artist"
+                                        placeholder={uploadMode === 'individual' ? "Album Artist" : "Main Artist"}
                                         value={mainMeta.artist}
                                         onChange={e => setMainMeta(p => ({ ...p, artist: e.target.value }))}
                                         className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
                                     />
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <input
-                                        type="text"
-                                        placeholder="Album"
-                                        value={mainMeta.album}
-                                        onChange={e => setMainMeta(p => ({ ...p, album: e.target.value }))}
-                                        className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
-                                    />
+                                    {uploadMode === 'versions' && (
+                                        <input
+                                            type="text"
+                                            placeholder="Album (Optional)"
+                                            value={mainMeta.album}
+                                            onChange={e => setMainMeta(p => ({ ...p, album: e.target.value }))}
+                                            className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
+                                        />
+                                    )}
                                     <input
                                         type="text"
                                         placeholder="Genre"
                                         value={mainMeta.genre}
                                         onChange={e => setMainMeta(p => ({ ...p, genre: e.target.value }))}
-                                        className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
+                                        className={`bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none ${uploadMode === 'individual' ? 'col-span-2' : ''}`}
                                     />
                                 </div>
                                 <div>

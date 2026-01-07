@@ -474,6 +474,10 @@ const App: React.FC = () => {
             const { mode, items, mainMetadata } = result;
 
             if (mode === 'individual') {
+              const sharedCoverUrl = mainMetadata?.coverFile
+                ? URL.createObjectURL(mainMetadata.coverFile)
+                : null;
+
               const newTracks = await Promise.all(items.map(async (item) => {
                 const url = URL.createObjectURL(item.file);
                 const peaks = await extractPeaks(url);
@@ -481,12 +485,12 @@ const App: React.FC = () => {
                   id: Math.random().toString(36).substr(2, 9),
                   artistId: 'art-user',
                   title: item.customMeta.title || item.file.name,
-                  artist: item.customMeta.artist || userProfile.name,
+                  artist: mainMetadata?.artist || item.customMeta.artist || userProfile.name,
                   bpm: parseInt(item.customMeta.bpm) || 124,
                   key: item.customMeta.key || '1A',
-                  genre: item.customMeta.genre || 'Tech House',
+                  genre: mainMetadata?.genre || item.customMeta.genre || 'Tech House',
                   duration: '4:00',
-                  coverUrl: `https://picsum.photos/seed/${item.file.name}/400/400`,
+                  coverUrl: sharedCoverUrl || `https://picsum.photos/seed/${item.file.name}/400/400`,
                   audioUrl: url,
                   downloadCount: 0,
                   likeCount: 0,
