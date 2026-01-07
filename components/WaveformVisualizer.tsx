@@ -14,19 +14,23 @@ interface WaveformVisualizerProps {
 const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({ peaks, progress, onSeek, isPlaying, analyser, duration, audioUrl }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hoverProgress, setHoverProgress] = useState<number | null>(null);
-  const [currentTime, setCurrentTime] = useState('0:00');
 
-  useEffect(() => {
-    const audioEl = document.querySelector('audio');
-    if (!audioEl) return;
-    const updateTime = () => {
-      const min = Math.floor(audioEl.currentTime / 60);
-      const sec = Math.floor(audioEl.currentTime % 60);
-      setCurrentTime(`${min}:${sec.toString().padStart(2, '0')}`);
-    };
-    audioEl.addEventListener('timeupdate', updateTime);
-    return () => audioEl.removeEventListener('timeupdate', updateTime);
-  }, []);
+  const parseDuration = (str?: string) => {
+    if (!str) return 0;
+    const parts = str.split(':');
+    if (parts.length === 2) return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+    return 0;
+  };
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
+
+  const totalSeconds = parseDuration(duration);
+  const currentSeconds = progress * totalSeconds;
+  const currentTime = formatTime(currentSeconds);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -130,25 +134,29 @@ const WaveformVisualizer: React.FC<WaveformVisualizerProps> = ({ peaks, progress
       <canvas ref={canvasRef} className="w-full h-full" />
 
       {/* Current Time Badge */}
-      <div
-        className="absolute bottom-2 z-10 px-1 bg-black text-[10px] font-bold text-[#ff5500] pointer-events-none"
-        style={{ left: `${progress * 100}%`, transform: 'translateX(-50%)' }}
-      >
-        {currentTime}
-      </div>
+      {(isPlaying || progress > 0) && (
+        <div
+          className="absolute bottom-2 z-10 px-1 bg-black text-[10px] font-bold text-[#ff5500] pointer-events-none"
+          style={{ left: `${progress * 100}%`, transform: 'translateX(-50%)' }}
+        >
+          {currentTime}
+        </div>
+      )}
 
-      {/* Duration Badge */}
+      {/* Duration Badge (Always show if available? Or only if inactive? Usually always good for info) */}
       {duration && (
-        <div className="absolute bottom-2 right-2 z-10 px-1 bg-black text-[10px] font-bold text-white pointer-events-none">
+        <div className="absolute bottom-2 right-2 z-10 px-1 bg-black text-[10px] font-bold text-white pointer-events-none opacity-50">
           {duration}
         </div>
       )}
 
       {/* Playhead Marker */}
-      <div
-        className="absolute top-0 bottom-0 w-[1px] bg-[#ff5500] pointer-events-none"
-        style={{ left: `${progress * 100}%` }}
-      />
+      {(isPlaying || progress > 0) && (
+        <div
+          className="absolute top-0 bottom-0 w-[1px] bg-[#ff5500] pointer-events-none"
+          style={{ left: `${progress * 100}%` }}
+        />
+      )}
     </div>
   );
 };
