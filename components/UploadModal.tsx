@@ -322,9 +322,9 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
 
                     {/* Main Metadata */}
                     {stage === 'organize' && (
-                        <div className="mb-8 p-6 bg-zinc-900/30 border border-white/5 rounded-3xl grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8">
+                        <div className="mb-4 md:mb-8 p-4 md:p-6 bg-zinc-900/30 border border-white/5 rounded-3xl grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 md:gap-8">
                             <div
-                                className="relative group cursor-pointer"
+                                className="relative group cursor-pointer w-32 h-32 mx-auto md:w-full md:h-auto md:mx-0"
                                 onClick={() => coverInputRef.current?.click()}
                                 onDragOver={handleCoverDragOver}
                                 onDrop={handleCoverDrop}
@@ -335,31 +335,31 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                         <img src={URL.createObjectURL(mainMeta.coverFile)} className="w-full h-full object-cover" />
                                     ) : (
                                         <>
-                                            <svg className="w-8 h-8 text-zinc-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                            <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center px-4">Upload Cover</span>
+                                            <svg className="w-6 h-6 md:w-8 md:h-8 text-zinc-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                            <span className="text-[8px] md:text-[9px] font-bold text-zinc-500 uppercase tracking-widest text-center px-2 md:px-4">Upload Cover</span>
                                         </>
                                     )}
                                 </div>
                             </div>
-                            <div className="space-y-4">
-                                <h3 className="text-white font-bold mb-2">Main Release Info</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-3 md:space-y-4">
+                                <h3 className="text-white font-bold mb-1 md:mb-2 text-center md:text-left">Main Release Info</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                                     <input
                                         type="text"
                                         placeholder={uploadMode === 'individual' ? "Album Title" : "Song Title"}
                                         value={mainMeta.title}
                                         onChange={e => setMainMeta(p => ({ ...p, title: e.target.value }))}
-                                        className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
+                                        className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-2 md:py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
                                     />
                                     <input
                                         type="text"
                                         placeholder={uploadMode === 'individual' ? "Album Artist" : "Main Artist"}
                                         value={mainMeta.artist}
                                         onChange={e => setMainMeta(p => ({ ...p, artist: e.target.value }))}
-                                        className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
+                                        className="bg-zinc-900 border border-white/10 rounded-xl px-4 py-2 md:py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none"
                                     />
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                                     {uploadMode === 'versions' && (
                                         <div className="relative group">
                                             <input
@@ -368,7 +368,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                                 placeholder="Album (Optional)"
                                                 value={mainMeta.album}
                                                 onChange={e => setMainMeta(p => ({ ...p, album: e.target.value }))}
-                                                className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none [&::-webkit-calendar-picker-indicator]:opacity-0"
+                                                className="w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-2 md:py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none [&::-webkit-calendar-picker-indicator]:opacity-0"
                                             />
                                             <datalist id="existing-albums-list">
                                                 {existingAlbums.map((alb, i) => (
@@ -385,7 +385,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ onClose, onUpload, defaultArt
                                         placeholder="Genre"
                                         value={mainMeta.genre}
                                         onChange={e => setMainMeta(p => ({ ...p, genre: e.target.value }))}
-                                        className={`bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none ${uploadMode === 'individual' ? 'md:col-span-2' : ''}`}
+                                        className={`bg-zinc-900 border border-white/10 rounded-xl px-4 py-2 md:py-3 text-white text-sm font-bold focus:border-[#ff5500] outline-none ${uploadMode === 'individual' ? 'md:col-span-2' : ''}`}
                                     />
                                 </div>
                                 <div>
